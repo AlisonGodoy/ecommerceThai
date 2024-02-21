@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "axios": "^1.6.7",
+    "vue-inputmask": "^0.2.1"
+  }
+}
