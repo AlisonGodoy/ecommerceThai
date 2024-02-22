@@ -133,28 +133,28 @@
       submitForm() {
         //envia post ao servidor
         axios.post('../Control/insertProduct.php', {
-          name: this.name,
-          price: this.price,
-          qtd: this.qtd,
-          image: this.image,
+          name:   this.name,
+          price:  this.price,
+          qtd:    this.qtd,
+          image:  this.image,
           
         })
         .then(response => {
-          this.name = '';
-          this.price = '0,00';
-          this.qtd = 0;
-          this.image = '';
-          this.showModal = false;
-          const data = response.data;
+          this.name       = '';
+          this.price      = '';
+          this.qtd        = 0;
+          this.image      = '';
+          this.showModal  = false;
+          const data      = response.data;
 
           if (data.success) {
             this.showSuccessMessage = true;
-            this.successMessage = alert(data.message);
+            this.successMessage     = alert(data.message);
             window.location.reload(true);
 
           }else {
             this.showErrorMessage = true;
-            this.errorMessage = alert(data.message);
+            this.errorMessage     = alert(data.message);
 
           }           
         })
