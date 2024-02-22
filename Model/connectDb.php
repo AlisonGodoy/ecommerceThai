@@ -66,6 +66,34 @@ class connectDb{
         }
     }
 
+    public function update($name, $price, $qtd, $date, $image, $id) {
+        try {
+            $sql = 'UPDATE product SET description = ?, price = ?, quantity = ?, datecad = ?, image = ? WHERE id = ?';
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([$name, $price, $qtd, $date, $image, $id]);
+
+            return true; // Update bem-sucedida
+
+        } catch (PDOException $e) {
+            return false; // Falha no update
+
+        }
+    }
+
+    public function delete($id) {
+        try {
+            $sql = 'DELETE FROM product WHERE id = ?';
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([$id]);
+
+            return true; // Delete bem-sucedida
+
+        } catch (PDOException $e) {
+            return false; // Falha no delete
+
+        }
+    }
+
 }
 
 

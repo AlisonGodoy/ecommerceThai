@@ -100,3 +100,8 @@ th {
   .btn-submit:hover {
     background-color: #45a049;
   }
+
+  .colunaClique{
+      cursor: pointer;
+      text-decoration: underline; 
+  }
