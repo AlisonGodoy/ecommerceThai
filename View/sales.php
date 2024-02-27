@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="../CSS/style.css">
   <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script> var productsData = <?php echo json_encode($products); ?>;</script>
   <script defer src="appVue.js"></script>
 
   <!-- Template do Modal-->
@@ -43,8 +44,12 @@
 </head>
 <body>
   <div id="app">
-    <nav>
-      <button id="show-modal" @click="showModal = true">Create Product</button>
+    <div id="header">
+      <div id="title">
+        <h3>Welcome Administrator</h3>
+      </div>
+      <button id="btnHeader" @click="showModal = true">Create Product</button>
+    </div>
       <modal v-if="showModal" @close="showModal = false">
 
       <h3 slot="header" v-if="!abrirProd">Insert Product</h3>
@@ -80,9 +85,11 @@
         </div>
       </form>
       </modal>
-    </nav>
 
-    <h3>Product List</h3>
+    <div class="table-description">
+      <h3>Product List</h3>   
+    </div>
+    <input type="search" id="search" v-model="MySearch" class="form-control" placeholder="Search for any of the columns"/>
 
     <table>
       <thead>
@@ -95,21 +102,21 @@
         </tr>
       </thead>
       <tbody>
-        <?php
-          foreach($products as $product){
-        ?>
-          <tr>
-            <td @click="showProductModal(<?=$product->id?>,'<?=$product->description?>','<?=$product->price?>','<?=$product->quantity?>','<?=$product->image?>')" class="colunaClique"><?= $product->description ?></td>
-            <td><?php echo $product->price?></td>    
-            <td><?= $product->quantity?></td>
-            <td><?= $product->datecad?></td>
-            <td><?= empty($product->image) ? "Unavailable" : $product->image; ?></td>
-          </tr>                    
-        <?php        
-            }
-        ?>
+        <tr v-for="product in displayedProducts" :key="product.id">
+          <td @click="showProductModal(product.id, product.description, product.price, product.quantity, product.image)" class="colunaClique">{{ product.description }}</td>
+          <td>R${{ formatPrice(product.price) }}</td>
+          <td>{{ product.quantity }}</td>
+          <td>{{ formatDate(product.datecad) }}</td>
+          <td>{{ product.image || "Unavailable" }}</td>
+        </tr>
       </tbody>
     </table>
+    <div class="pagination-container">
+      <button @click="changePage(currentPage - 1)" :disabled="currentPage === 1">Previous</button>
+      <span>Page {{ currentPage }} of {{ totalPages }}</span>
+      <button @click="changePage(currentPage + 1)" :disabled="currentPage === totalPages">Next</button>
+    </div>
+    <span style="margin-left: 1600px;">Total products: {{ filteredProducts.length }}</span>
   </div>          
 </body>
 
