@@ -18,12 +18,24 @@ new Vue({
       qtd: 0,
       image: '',
       id: 0,
-      oper: 0,
+      oper: '',
+      metodo: '',
       MySearch: '',
-      products: productsData,
+      products: [],
       itemsPerPage: 10,
       currentPage: 1,
   },
+  mounted() {
+    //Executa quando o Vue é montado
+    axios.get('http://127.0.0.1:8000/api/products') //busca todos os produtos da API
+      .then((response) => {
+        this.products = response.data.products;
+      })
+      .catch((error) => {
+        console.error('Erro na API:', error);
+      });
+  },
+
   computed: {
     //responsável pelo filtro no campo de busca MySearch
     filteredProducts() {
@@ -39,6 +51,7 @@ new Vue({
     totalPages() {
       return Math.ceil(this.filteredProducts.length / this.itemsPerPage);
     },
+
     //aqui define o star e o end da página solicitado, retornando os dados de filteredProducts
     displayedProducts() {
       const start = (this.currentPage - 1) * this.itemsPerPage;
@@ -49,30 +62,32 @@ new Vue({
     },
   },
   methods: {
-    //envia post ao servidor
+    //chama a API de acordo com o método a ser executado
     submitForm() {
       if (this.alterProd){
-        this.oper = 2;
+        this.oper = 'update';
+        this.metodo = 'patch';
       
       }else if(this.excluiProd){
         if (window.confirm('Tem certeza da exclusão?')) {
-          this.oper = 3;
+          this.oper = this.id; //pois para o delete o id é passado diretamente na URL
+          this.metodo = 'delete';
+          
         } else {
             return;
         }
         
       }else {
-        this.oper = 1;
-
+        this.oper = 'create';
+        this.metodo = 'post';
       }
 
-      axios.post('../Control/validaOperacao.php', {
-        name:   this.name,
-        price:  this.price,
-        qtd:    this.qtd,
-        image:  this.image,
-        oper:   this.oper,
-        id:     this.id,
+      axios[this.metodo]('http://127.0.0.1:8000/api/products/'+this.oper, {
+        description:  this.name,
+        price:        this.price,
+        quantity:     this.qtd,
+        image:        this.image,
+        id:           this.id,
         
       })
       .then(response => {
@@ -103,7 +118,7 @@ new Vue({
       });
     },
 
-    //mascára para o preço
+    //Mascára para o preço
     maskPrice() {
       this.price = this.price.replace(/\D/g, '');
       if (this.price.length > 2) {
@@ -122,7 +137,7 @@ new Vue({
       return `${day}/${month}/${year}`;
     },
 
-    //método para abrir a tela de alteração e deleção
+    //Método para abrir a tela de alteração e deleção
     showProductModal(productId, productName, productPrice, productQtd, productImage) {
       this.showModal  = true;
       this.abrirProd  = true;
@@ -135,7 +150,7 @@ new Vue({
       this.id         = productId;
     },
 
-    //método que fecha o modal, resetando seus campos
+    //Método que fecha o modal, resetando seus campos
     closeModal() {
     this.name       = '';
     this.price      = '0,00';
@@ -147,7 +162,7 @@ new Vue({
     this.excluiProd = false;
     },
 
-    //alterna entre as páginas
+    //Alterna entre as páginas
     changePage(page) {
       if (page >= 1 && page <= this.totalPages) {
         this.currentPage = page;

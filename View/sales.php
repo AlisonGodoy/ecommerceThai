@@ -1,13 +1,3 @@
-<?php
-
-  include_once '../Model/connectDb.php';
-
-  $sql = 'select * from product';
-  $listaProduct = new connectDb();
-  $products = $listaProduct->consulta($sql);
-
-?>
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -16,7 +6,6 @@
   <link rel="stylesheet" href="../CSS/style.css">
   <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  <script> var productsData = <?php echo json_encode($products); ?>;</script>
   <script defer src="appVue.js"></script>
 
   <!-- Template do Modal-->
