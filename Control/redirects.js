@@ -1,5 +1,5 @@
-function redirectToSales(){
-    window.location.href = "./View/sales.php"
+function redirectToAdmin(){
+    window.location.href = "./View/admin.php"
 
 }
 

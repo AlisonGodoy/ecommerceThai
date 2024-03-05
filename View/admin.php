@@ -2,10 +2,10 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <title>Sales</title>
+  <title>Administrator</title>
   <link rel="stylesheet" href="../CSS/style.css">
-  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="../node_modules/vue/dist/vue.js"></script>
+  <script src="../node_modules/axios/dist/axios.min.js"></script>
   <script defer src="appVue.js"></script>
 
   <!-- Template do Modal-->

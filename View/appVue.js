@@ -45,7 +45,7 @@ new Vue({
                product.price.toString().includes(search) ||
                product.quantity.toString().includes(search) ||
                product.datecad.includes(search) ||
-               product.image.toLowerCase().includes(search);
+               (product.image && product.image.toLowerCase().includes(search)); //necessário "product.image &&" para só acessar as funções se não for nulo
       });
     },
     totalPages() {
