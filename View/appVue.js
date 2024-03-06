@@ -16,6 +16,7 @@ new Vue({
       name: '',
       price: '',
       qtd: 0,
+      id_category: 0,
       image: '',
       id: 0,
       oper: '',
@@ -41,15 +42,30 @@ new Vue({
     filteredProducts() {
       const search = this.MySearch.toLowerCase();
       return this.products.filter(product => {
+        const categoryId = product.id_category;
+        const categoryDescription = this.categoryMappings[categoryId]; //retorna a descrição da categoria informado em categoryMappings
+
         return product.description.toLowerCase().includes(search) ||
                product.price.toString().includes(search) ||
                product.quantity.toString().includes(search) ||
+               categoryDescription.toLowerCase().includes(search) ||
                product.datecad.includes(search) ||
                (product.image && product.image.toLowerCase().includes(search)); //necessário "product.image &&" para só acessar as funções se não for nulo
       });
     },
     totalPages() {
       return Math.ceil(this.filteredProducts.length / this.itemsPerPage);
+    },
+
+    //Relaciona ID com a descrição das categorias
+    categoryMappings() {
+      return {
+        1: 'Equipamentos',
+        2: 'Vestimentas',
+        3: 'Acessórios',
+        4: 'Colecionáveis',
+
+      };
     },
 
     //aqui define o star e o end da página solicitado, retornando os dados de filteredProducts
@@ -86,20 +102,22 @@ new Vue({
         description:  this.name,
         price:        this.price,
         quantity:     this.qtd,
+        id_category:  this.id_category,
         image:        this.image,
         id:           this.id,
         
       })
       .then(response => {
-        this.name       = '';
-        this.price      = '';
-        this.qtd        = 0;
-        this.image      = '';
-        this.showModal  = false;
-        this.abrirProd  = false;
-        this.alterProd  = false;
-        this.excluiProd = false;
-        const data      = response.data;
+        this.name         = '';
+        this.price        = '';
+        this.qtd          = 0;
+        this.id_category  = 0; 
+        this.image        = '';
+        this.showModal    = false;
+        this.abrirProd    = false;
+        this.alterProd    = false;
+        this.excluiProd   = false;
+        const data        = response.data;
 
         if (data.success) {
           this.showSuccessMessage = true;
@@ -116,6 +134,12 @@ new Vue({
         alert("Não foi possível enviar as informações. Tente novamente ou contate o administrador.");
 
       });
+    },
+
+    //Retorna descrição da categoria.
+    getCategoryDescription(categoryId) {
+      return this.categoryMappings[categoryId] || 'Não Categorizado';
+
     },
 
     //Mascára para o preço
@@ -138,28 +162,30 @@ new Vue({
     },
 
     //Método para abrir a tela de alteração e deleção
-    showProductModal(productId, productName, productPrice, productQtd, productImage) {
-      this.showModal  = true;
-      this.abrirProd  = true;
-      this.alterProd  = false;
-      this.excluiProd = false;
-      this.name       = productName;
-      this.price      = productPrice.replace(/\./g, ',');
-      this.qtd        = productQtd;
-      this.image      = productImage;
-      this.id         = productId;
+    showProductModal(productId, productName, productPrice, productQtd, productCategory, productImage) {
+      this.showModal    = true;
+      this.abrirProd    = true;
+      this.alterProd    = false;
+      this.excluiProd   = false;
+      this.name         = productName;
+      this.price        = productPrice.replace(/\./g, ',');
+      this.qtd          = productQtd;
+      this.id_category  = productCategory;
+      this.image        = productImage;
+      this.id           = productId;
     },
 
     //Método que fecha o modal, resetando seus campos
     closeModal() {
-    this.name       = '';
-    this.price      = '0,00';
-    this.qtd        = 0;
-    this.image      = '';
-    this.showModal  = false;
-    this.abrirProd  = false;
-    this.alterProd  = false;
-    this.excluiProd = false;
+    this.name         = '';
+    this.price        = '0,00';
+    this.qtd          = 0;
+    this.id_category  = 0;
+    this.image        = '';
+    this.showModal    = false;
+    this.abrirProd    = false;
+    this.alterProd    = false;
+    this.excluiProd   = false;
     },
 
     //Alterna entre as páginas

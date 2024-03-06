@@ -54,6 +54,11 @@
 
           <label class="form-label" for="qtd">Quantity:</label>
           <input type="number" class="form-control" id="qtd" v-model="qtd" required>
+
+          <label class="form-label" for="id_category">Category:</label>
+          <select class="form-control" id="id_category" v-model="id_category" required>
+            <option v-for="(description, id) in categoryMappings" :key="id" :value="id">{{ description }}</option>
+          </select>
         
           <label class="form-label" for="image">URL Image:</label>
           <input type="text" class="form-control" id="image" v-model="image">
@@ -86,15 +91,17 @@
           <th>Description</th>
           <th>Price</th>
           <th>Quantity</th>
+          <th>Category</th>
           <th>Register</th>
           <th>URL Image</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="product in displayedProducts" :key="product.id">
-          <td @click="showProductModal(product.id, product.description, product.price, product.quantity, product.image)" class="colunaClique">{{ product.description }}</td>
+          <td @click="showProductModal(product.id, product.description, product.price, product.quantity, product.id_category, product.image)" class="colunaClique">{{ product.description }}</td>
           <td>R${{ formatPrice(product.price) }}</td>
           <td>{{ product.quantity }}</td>
+          <td>{{ getCategoryDescription(product.id_category) }}</td>
           <td>{{ formatDate(product.datecad) }}</td>
           <td>{{ product.image || "Unavailable" }}</td>
         </tr>

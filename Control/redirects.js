@@ -3,7 +3,7 @@ function redirectToAdmin(){
 
 }
 
-function redirectToPlaces(){
-    window.location.href = "./View/places.php"
+function redirectToSales(){
+    window.location.href = "./View/sales.php"
 
 }
